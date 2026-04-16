@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="JobTracker.Jobs.Application.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../JobTracker.Jobs.Domain/JobTracker.Jobs.Domain.csproj" />
+    <ProjectReference Include="../JobTracker.Jobs.IntegrationEvents/JobTracker.Jobs.IntegrationEvents.csproj" />
+    <ProjectReference Include="../../../Shared/JobTracker.Shared.Domain/JobTracker.Shared.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.*" />
+    <PackageReference Include="MediatR" Version="12.*" />
+    <PackageReference Include="FluentValidation" Version="11.*" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.*" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.*" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.*" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,70 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Shared.Domain", "src/Shared/JobTracker.Shared.Domain/JobTracker.Shared.Domain.csproj", "{A1B2C3D4-0001-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Shared.Infrastructure", "src/Shared/JobTracker.Shared.Infrastructure/JobTracker.Shared.Infrastructure.csproj", "{A1B2C3D4-0002-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.Domain", "src/Modules/Jobs/JobTracker.Jobs.Domain/JobTracker.Jobs.Domain.csproj", "{A1B2C3D4-0003-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.Application", "src/Modules/Jobs/JobTracker.Jobs.Application/JobTracker.Jobs.Application.csproj", "{A1B2C3D4-0004-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.Infrastructure", "src/Modules/Jobs/JobTracker.Jobs.Infrastructure/JobTracker.Jobs.Infrastructure.csproj", "{A1B2C3D4-0005-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.Api", "src/Modules/Jobs/JobTracker.Jobs.Api/JobTracker.Jobs.Api.csproj", "{A1B2C3D4-0006-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.IntegrationEvents", "src/Modules/Jobs/JobTracker.Jobs.IntegrationEvents/JobTracker.Jobs.IntegrationEvents.csproj", "{A1B2C3D4-0007-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.Domain.Tests", "tests/JobTracker.Jobs.Domain.Tests/JobTracker.Jobs.Domain.Tests.csproj", "{A1B2C3D4-0008-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.Application.Tests", "tests/JobTracker.Jobs.Application.Tests/JobTracker.Jobs.Application.Tests.csproj", "{A1B2C3D4-0009-0000-0000-000000000001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JobTracker.Jobs.Architecture.Tests", "tests/JobTracker.Jobs.Architecture.Tests/JobTracker.Jobs.Architecture.Tests.csproj", "{A1B2C3D4-0010-0000-0000-000000000001}"
+EndProject
+Global
+    GlobalSection(SolutionConfigurationPlatforms) = preSolution
+        Debug|Any CPU = Debug|Any CPU
+        Release|Any CPU = Release|Any CPU
+    EndGlobalSection
+    GlobalSection(ProjectConfigurationPlatforms) = postSolution
+        {A1B2C3D4-0001-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0001-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0001-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0001-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0002-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0002-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0002-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0002-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0003-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0003-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0003-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0003-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0004-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0004-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0004-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0004-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0005-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0005-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0005-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0005-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0006-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0006-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0006-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0006-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0007-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0007-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0007-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0007-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0008-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0008-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0008-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0008-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0009-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0009-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0009-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0009-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+        {A1B2C3D4-0010-0000-0000-000000000001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+        {A1B2C3D4-0010-0000-0000-000000000001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+        {A1B2C3D4-0010-0000-0000-000000000001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+        {A1B2C3D4-0010-0000-0000-000000000001}.Release|Any CPU.Build.0 = Release|Any CPU
+    EndGlobalSection
+EndGlobal
