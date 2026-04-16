@@ -23,6 +23,7 @@ interface CreateJobModalProps {
   readonly address: AddressAutocompleteState
   readonly selectedAddress: AddressSuggestion | null
   readonly onAddressSelect: (suggestion: AddressSuggestion) => void
+  readonly defaultCustomerId?: string
 }
 
 export function CreateJobModal({
@@ -34,6 +35,7 @@ export function CreateJobModal({
   address,
   selectedAddress,
   onAddressSelect,
+  defaultCustomerId,
 }: Readonly<CreateJobModalProps>) {
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -80,7 +82,7 @@ export function CreateJobModal({
           </fieldset>
 
           <fieldset className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <FormField id="customerId" label="Customer ID" error={fieldErrors.customerId} />
+            <FormField id="customerId" label="Customer ID" error={fieldErrors.customerId} value={defaultCustomerId} />
             <FormField id="assigneeId" label="Assignee ID" error={fieldErrors.assigneeId} />
           </fieldset>
 

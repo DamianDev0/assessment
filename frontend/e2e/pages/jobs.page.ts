@@ -47,7 +47,7 @@ export class JobsPage {
 
   async submitCreateForm() {
     await this.page.getByTestId('create-job-submit').click()
-    // Modal closes on success
+   
     await expect(this.page.getByTestId('create-job-modal')).toBeHidden({ timeout: 5_000 })
   }
 

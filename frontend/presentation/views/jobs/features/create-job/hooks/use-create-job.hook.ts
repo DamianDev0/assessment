@@ -4,6 +4,7 @@ import { useReducer, useCallback, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
 import { clientContainer } from '@/core/infrastructure/container/client-container'
+import { DEFAULT_CUSTOMER_ID } from '@/core/config/api'
 import { createJobSchema } from '@/core/application/schemas/create-job.schema'
 import { useAddressAutocomplete } from '@/components/hooks/use-address-autocomplete'
 import { extractFormValues } from '@/core/shared/utils/form'
@@ -110,6 +111,7 @@ export function useCreateJob(onSuccess: () => void) {
     fieldErrors: state.fieldErrors,
     address,
     selectedAddress,
+    defaultCustomerId: DEFAULT_CUSTOMER_ID,
     openModal,
     closeModal,
     handleAddressSelect,

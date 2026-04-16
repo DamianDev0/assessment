@@ -13,8 +13,8 @@ test.describe('Jobs page', () => {
     await expect(jobsPage.table).toBeVisible()
   })
 
-  test('create, filter, and complete a job', async ({ page }) => {
-    // ── 1. Create ────────────────────────────────────────────────────────────
+  test('create, filter, and complete a job', async ({ }) => {
+    
     await jobsPage.openCreateModal()
 
     await jobsPage.fillJobForm({
@@ -26,18 +26,18 @@ test.describe('Jobs page', () => {
 
     await jobsPage.submitCreateForm()
 
-    // Job appears in table
+    
     await expect(jobsPage.table).toContainText('E2E Test Job')
 
-    // ── 2. Filter ────────────────────────────────────────────────────────────
+    
     await jobsPage.filterByStatus('draft')
 
     await expect(jobsPage.table).toContainText('E2E Test Job')
 
-    // Reset filter
+    
     await jobsPage.filterByStatus('')
 
-    // ── 3. Search ────────────────────────────────────────────────────────────
+
     await jobsPage.searchJobs('E2E Test')
     await expect(jobsPage.table).toContainText('E2E Test Job')
     await jobsPage.searchJobs('')
@@ -47,7 +47,7 @@ test.describe('Jobs page', () => {
     await jobsPage.openCreateModal()
     await page.getByTestId('create-job-submit').click()
 
-    // HTML5 required validation prevents submission
+    
     const titleInput = page.getByTestId('job-title-input')
     await expect(titleInput).toBeFocused()
   })

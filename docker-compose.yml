@@ -29,7 +29,7 @@ services:
       ASPNETCORE_URLS: http://+:8080
       # OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317   # uncomment + add jaeger service to export traces
     ports:
-      - "5000:8080"
+      - "5050:8080"
     depends_on:
       postgres:
         condition: service_healthy
@@ -41,9 +41,10 @@ services:
     restart: unless-stopped
     environment:
       API_URL: http://backend:8080
-      NEXT_PUBLIC_API_URL: http://localhost:5000
+      NEXT_PUBLIC_API_URL: http://localhost:5050
       DEFAULT_ORG_ID: "00000000-0000-0000-0000-000000000001"
       NEXT_PUBLIC_ORG_ID: "00000000-0000-0000-0000-000000000001"
+      NEXT_PUBLIC_DEFAULT_CUSTOMER_ID: "00000000-0000-0000-0000-000000000002"
       OTEL_SERVICE_NAME: "jobtracker-frontend"
     ports:
       - "3000:3000"

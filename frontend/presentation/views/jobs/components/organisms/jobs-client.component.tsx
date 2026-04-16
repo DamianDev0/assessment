@@ -69,6 +69,7 @@ export function JobsClient(props: Readonly<JobsClientProps>) {
         address={createJob.address}
         selectedAddress={createJob.selectedAddress}
         onAddressSelect={createJob.handleAddressSelect}
+        defaultCustomerId={createJob.defaultCustomerId}
       />
 
       <ScheduleJobModal
