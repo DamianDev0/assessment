@@ -22,18 +22,26 @@ export function getJobActions(job: Job): DataTableAction[] {
   return ACTION_MAP[job.status] ?? []
 }
 
+function formatDate(iso: string | null): string {
+  if (!iso) return "—"
+  return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+}
+
 export const getJobsColumns = (): DataTableColumn<Job>[] => [
   {
     key: "title",
     header: "Title",
     sortable: true,
+    render: (job) => <span className="font-[510] text-foreground">{job.title}</span>,
+  },
+  {
+    key: "description",
+    header: "Description",
+    className: "hidden lg:table-cell max-w-[200px]",
     render: (job) => (
-      <div>
-        <span className="font-[510] text-foreground">{job.title}</span>
-        <span className="block sm:hidden text-xs text-muted-foreground mt-0.5">
-          {job.city}, {job.state}
-        </span>
-      </div>
+      <span className="text-muted-foreground truncate block" title={job.description}>
+        {job.description || "—"}
+      </span>
     ),
   },
   {
@@ -46,7 +54,9 @@ export const getJobsColumns = (): DataTableColumn<Job>[] => [
     key: "city",
     header: "Location",
     className: "hidden md:table-cell",
-    render: (job) => <span className="text-muted-foreground">{job.city}, {job.state}</span>,
+    render: (job) => (
+      <span className="text-muted-foreground">{job.city}, {job.state}</span>
+    ),
   },
   {
     key: "scheduledDate",
@@ -54,9 +64,34 @@ export const getJobsColumns = (): DataTableColumn<Job>[] => [
     sortable: true,
     className: "hidden lg:table-cell",
     render: (job) => (
-      <span className="text-muted-foreground">
-        {job.scheduledDate ? new Date(job.scheduledDate).toISOString().slice(0, 10) : "—"}
+      <span className="text-muted-foreground">{formatDate(job.scheduledDate)}</span>
+    ),
+  },
+  {
+    key: "assigneeId",
+    header: "Assignee",
+    className: "hidden xl:table-cell",
+    render: (job) => (
+      <span className="text-muted-foreground text-xs font-mono">
+        {job.assigneeId ? job.assigneeId.slice(0, 8) : "—"}
       </span>
+    ),
+  },
+  {
+    key: "photoCount",
+    header: "Photos",
+    className: "hidden xl:table-cell",
+    render: (job) => (
+      <span className="text-muted-foreground">{job.photoCount}</span>
+    ),
+  },
+  {
+    key: "createdAt",
+    header: "Created",
+    sortable: true,
+    className: "hidden lg:table-cell",
+    render: (job) => (
+      <span className="text-muted-foreground">{formatDate(job.createdAt)}</span>
     ),
   },
 ]
