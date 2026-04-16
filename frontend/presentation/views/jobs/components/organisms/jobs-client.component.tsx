@@ -9,6 +9,7 @@ import { ScheduleJobModal } from '../../features/schedule-job'
 import { FilterBar } from '../../features/filter-jobs'
 import { DataTable } from '@/components/organisms/data-table'
 import { ErrorBoundary } from '@/components/organisms/error-boundary'
+import { JobExpandedRow } from '../molecules/job-expanded-row.component'
 import { Button } from '@/components/shadcn/button'
 import { ThemeToggle } from '@/components/atoms/theme-toggle'
 import { getJobsColumns, getJobActions } from '../../config/jobs-columns.config'
@@ -56,6 +57,8 @@ export function JobsClient(props: Readonly<JobsClientProps>) {
             actions={getJobActions}
             onRowAction={handleRowAction}
             emptyMessage="No jobs found"
+            expandable
+            renderExpandedRow={(job) => <JobExpandedRow job={job} />}
           />
         </div>
       </ErrorBoundary>
