@@ -32,7 +32,7 @@ export function JobExpandedRow({ job }: Readonly<JobExpandedRowProps>) {
       <Detail icon={MapPin} label="Address" value={`${job.street}, ${job.city}, ${job.state} ${job.zipCode}`} />
       <Detail icon={Calendar} label="Scheduled" value={formatDate(job.scheduledDate)} />
       <Detail icon={User} label="Assignee" value={job.assigneeId ?? 'Unassigned'} />
-      <Detail icon={Camera} label="Photos" value={`${job.photoCount} photo${job.photoCount !== 1 ? 's' : ''}`} />
+      <Detail icon={Camera} label="Photos" value={`${job.photoCount} photo${job.photoCount === 1 ? '' : 's'}`} />
       <Detail icon={Clock} label="Created" value={formatDate(job.createdAt)} />
 
       <div className="sm:col-span-2 lg:col-span-3 flex items-center gap-3 pt-2 border-t border-border">
