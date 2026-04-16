@@ -3,7 +3,7 @@
 import { useReducer, useCallback, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { clientContainer } from '@/core/infrastructure/di/client-container'
+import { clientContainer } from '@/core/infrastructure/container/client-container'
 import { createJobSchema } from '@/core/application/schemas/create-job.schema'
 import { useAddressAutocomplete } from '@/components/hooks/use-address-autocomplete'
 import { extractFormValues } from '@/core/shared/utils/form'

@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { clientContainer } from '@/core/infrastructure/di/client-container'
+import { clientContainer } from '@/core/infrastructure/container/client-container'
 import { useJobsStore } from '@/store/jobs.store'
 import { JobStatus } from '@/core/shared/enums/job-status.enum'
 

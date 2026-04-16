@@ -2,7 +2,7 @@ import 'server-only'
 import { Suspense } from 'react'
 import { JobsClient } from '@/presentation/views/jobs'
 import { JobsSkeleton } from '@/presentation/views/jobs/components/organisms/jobs-skeleton.component'
-import { container } from '@/core/infrastructure/di/server-container'
+import { container } from '@/core/infrastructure/container/server-container'
 
 export default async function JobsPage() {
   const response = await container.getJobsUseCase.execute()
