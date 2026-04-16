@@ -30,3 +30,8 @@ backend/src/**/obj/
 
 # Docker volumes / local data
 postgres_data/
+
+# Internal / tooling
+.agents/
+DESIGN.md
+skills-lock.json
