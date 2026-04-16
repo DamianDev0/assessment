@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "lighthouse": "rm -rf .lighthouseci && lhci autorun --config=.lighthouserc.ci.json && ln -sf \"$(ls -t .lighthouseci/lhr-*.html | head -1 | xargs basename)\" .lighthouseci/latest.html && open .lighthouseci/latest.html"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.1",
