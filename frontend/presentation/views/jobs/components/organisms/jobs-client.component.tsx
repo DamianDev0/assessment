@@ -8,6 +8,7 @@ import { CompleteJobModal } from '../../features/complete-job'
 import { ScheduleJobModal } from '../../features/schedule-job'
 import { FilterBar } from '../../features/filter-jobs'
 import { DataTable } from '@/components/organisms/data-table'
+import { ErrorBoundary } from '@/components/organisms/error-boundary'
 import { Button } from '@/components/shadcn/button'
 import { ThemeToggle } from '@/components/atoms/theme-toggle'
 import { getJobsColumns, getJobActions } from '../../config/jobs-columns.config'
@@ -47,15 +48,17 @@ export function JobsClient(props: Readonly<JobsClientProps>) {
         <FilterBar.Search value={filters.searchTerm} />
       </FilterBar>
 
-      <div data-testid="jobs-table">
-        <DataTable
-          data={jobs}
-          columns={columns}
-          actions={getJobActions}
-          onRowAction={handleRowAction}
-          emptyMessage="No jobs found"
-        />
-      </div>
+      <ErrorBoundary>
+        <div data-testid="jobs-table">
+          <DataTable
+            data={jobs}
+            columns={columns}
+            actions={getJobActions}
+            onRowAction={handleRowAction}
+            emptyMessage="No jobs found"
+          />
+        </div>
+      </ErrorBoundary>
 
       <CreateJobModal
         isOpen={createJob.isModalOpen}
