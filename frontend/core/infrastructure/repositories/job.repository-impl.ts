@@ -15,9 +15,19 @@ export class JobRepositoryImpl implements JobRepository {
     return jobService.create(data)
   }
 
+  schedule(jobId: string, scheduledDate: string, assigneeId: string): Promise<void> {
+    return jobService.schedule(jobId, scheduledDate, assigneeId)
+  }
+
+  start(jobId: string): Promise<void> {
+    return jobService.start(jobId)
+  }
+
   complete(jobId: string, data: CompleteJobRequest): Promise<void> {
     return jobService.complete(jobId, data)
   }
-}
 
-export const jobRepository = new JobRepositoryImpl()
+  cancel(jobId: string, reason: string): Promise<void> {
+    return jobService.cancel(jobId, reason)
+  }
+}

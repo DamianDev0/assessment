@@ -3,7 +3,7 @@
 import { useReducer, useCallback, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { jobService } from '@/core/infrastructure/services/job.service'
+import { clientContainer } from '@/core/infrastructure/di/client-container'
 import { createJobSchema } from '@/core/application/schemas/create-job.schema'
 import { useAddressAutocomplete } from '@/components/hooks/use-address-autocomplete'
 import { extractFormValues } from '@/core/shared/utils/form'
@@ -55,7 +55,7 @@ export function useCreateJob(onSuccess: () => void) {
   const [selectedAddress, setSelectedAddress] = useState<AddressSuggestion | null>(null)
 
   const mutation = useMutation({
-    mutationFn: (data: CreateJobFormData) => jobService.create(data),
+    mutationFn: (data: CreateJobFormData) => clientContainer.createJob.execute(data),
     onSuccess: () => {
       dispatch({ type: 'CLOSE_MODAL' })
       setSelectedAddress(null)

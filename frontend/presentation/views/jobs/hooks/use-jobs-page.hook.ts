@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
 import { useShallow } from 'zustand/react/shallow'
 import { useJobsStore, selectFilteredJobs, selectFilters } from '@/store/jobs.store'
-import { jobService } from '@/core/infrastructure/services/job.service'
+import { clientContainer } from '@/core/infrastructure/di/client-container'
 import { useCreateJob } from '../features/create-job'
 import { useCompleteJob } from '../features/complete-job'
 import { useScheduleJob } from '../features/schedule-job'
@@ -30,7 +30,7 @@ export function useJobsPage(initialJobs: readonly Job[]) {
   const startMutation = useMutation({
     mutationFn: (jobId: string) => {
       updateJobStatusOptimistic(jobId, 'InProgress')
-      return jobService.start(jobId)
+      return clientContainer.startJob.execute(jobId)
     },
     onSuccess: () => { sileo.success({ title: 'Job started' }); handleMutationSuccess() },
     onError: (error: Error, jobId: string) => { rollbackJobStatus(jobId, 'Scheduled'); sileo.error({ title: 'Failed', description: error.message }) },
@@ -39,7 +39,7 @@ export function useJobsPage(initialJobs: readonly Job[]) {
   const cancelMutation = useMutation({
     mutationFn: (jobId: string) => {
       updateJobStatusOptimistic(jobId, 'Cancelled')
-      return jobService.cancel(jobId, 'Cancelled by user')
+      return clientContainer.cancelJob.execute(jobId, 'Cancelled by user')
     },
     onSuccess: () => { sileo.success({ title: 'Job cancelled' }); handleMutationSuccess() },
     onError: (error: Error, jobId: string) => { rollbackJobStatus(jobId, 'Draft'); sileo.error({ title: 'Failed', description: error.message }) },

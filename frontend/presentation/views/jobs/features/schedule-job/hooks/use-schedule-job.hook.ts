@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { jobService } from '@/core/infrastructure/services/job.service'
+import { clientContainer } from '@/core/infrastructure/di/client-container'
 import { useJobsStore } from '@/store/jobs.store'
 
 export function useScheduleJob(onSuccess: () => void) {
@@ -14,7 +14,7 @@ export function useScheduleJob(onSuccess: () => void) {
   const mutation = useMutation({
     mutationFn: ({ jobId, date, assigneeId }: { jobId: string; date: Date; assigneeId: string }) => {
       updateJobStatusOptimistic(jobId, 'Scheduled')
-      return jobService.schedule(jobId, date.toISOString(), assigneeId)
+      return clientContainer.scheduleJob.execute(jobId, date.toISOString(), assigneeId)
     },
     onSuccess: () => {
       setIsModalOpen(false)

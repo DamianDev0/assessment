@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
-import { jobService } from '@/core/infrastructure/services/job.service'
+import { clientContainer } from '@/core/infrastructure/di/client-container'
 import { useJobsStore } from '@/store/jobs.store'
 
 export function useCompleteJob(onSuccess: () => void) {
@@ -15,7 +15,7 @@ export function useCompleteJob(onSuccess: () => void) {
     mutationFn: (signatureUrl: string) => {
       if (!selectedJobId) throw new Error('No job selected')
       updateJobStatusOptimistic(selectedJobId, 'Completed')
-      return jobService.complete(selectedJobId, { signatureUrl })
+      return clientContainer.completeJob.execute(selectedJobId, { signatureUrl })
     },
     onSuccess: () => {
       setIsModalOpen(false)
