@@ -35,6 +35,10 @@ postgres_data/
 # Lighthouse CI reports
 .lighthouseci/
 
+# Playwright artifacts
+playwright-report/
+test-results/
+
 # Internal / tooling
 .agents/
 DESIGN.md
