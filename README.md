@@ -49,7 +49,44 @@ See [`frontend/.env.example`](frontend/.env.example) for all required variables.
 
 ---
 
-## Running Tests
+## Make Commands
+
+All common operations have short aliases via `Makefile`:
+
+| Command | What it does |
+|---------|-------------|
+| `make up` | Start full stack (postgres + backend + frontend) via Docker |
+| `make down` | Stop everything |
+| `make db` | Start only Postgres (for local dev) |
+| `make dev-api` | Run backend locally (`dotnet run`) |
+| `make dev-web` | Run frontend locally (`pnpm dev`) |
+| `make test-api` | Backend tests (39 tests) |
+| `make test-web` | Frontend unit tests (32 tests) |
+| `make test-e2e` | Playwright E2E (5 tests, needs docker stack) |
+| `make test-all` | Backend + frontend tests |
+| `make lint` | ESLint |
+| `make lighthouse` | Lighthouse CI (needs docker stack) |
+
+### Local dev workflow
+
+```bash
+make db           # start postgres
+make dev-api      # terminal 1: backend on :5050
+make dev-web      # terminal 2: frontend on :3000
+```
+
+### Full docker workflow
+
+```bash
+make up           # everything on docker
+# http://localhost:3000/jobs   http://localhost:5050/swagger
+make test-e2e     # run E2E against docker stack
+make lighthouse   # lighthouse against docker stack
+```
+
+---
+
+## Running Tests (long form)
 
 ```bash
 # Backend (39 tests: domain + application + architecture)

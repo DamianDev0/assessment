@@ -34,7 +34,15 @@ up:
 down:
 	docker compose down
 
+# Apaga backend+frontend containers pero deja postgres corriendo
+down-apps:
+	docker compose stop backend frontend && docker compose rm -f backend frontend
+
+# Solo postgres (para dev local)
+db:
+	docker compose up -d postgres
+
 test-all:
 	$(MAKE) test-api && $(MAKE) test-web
 
-.PHONY: dev-api test-api build-api dev-web build-web test-web test-e2e lint lighthouse up down test-all
+.PHONY: dev-api test-api build-api dev-web build-web test-web test-e2e lint lighthouse up down down-apps db test-all
