@@ -1,12 +1,14 @@
 import type { JobRepository } from '@/core/domain/repositories/job.repository'
 import { JobRepositoryImpl } from '@/core/infrastructure/repositories/job.repository-impl'
-import { SearchJobsUseCase } from '@/core/application/use-cases/search-jobs.use-case'
-import { GetJobByIdUseCase } from '@/core/application/use-cases/get-job-by-id.use-case'
-import { CreateJobUseCase } from '@/core/application/use-cases/create-job.use-case'
-import { CompleteJobUseCase } from '@/core/application/use-cases/complete-job.use-case'
-import { ScheduleJobUseCase } from '@/core/application/use-cases/schedule-job.use-case'
-import { StartJobUseCase } from '@/core/application/use-cases/start-job.use-case'
-import { CancelJobUseCase } from '@/core/application/use-cases/cancel-job.use-case'
+import {
+  SearchJobsUseCase,
+  GetJobByIdUseCase,
+  CreateJobUseCase,
+  CompleteJobUseCase,
+  ScheduleJobUseCase,
+  StartJobUseCase,
+  CancelJobUseCase,
+} from '@/core/application/use-cases/jobs'
 
 class ClientContainer {
   private _jobRepository?: JobRepository

@@ -1,6 +1,6 @@
 import 'server-only'
 import { JobServerRepositoryImpl } from '@/core/infrastructure/repositories/job.server-repository-impl'
-import { GetJobsUseCase } from '@/core/application/use-cases/get-jobs.use-case'
+import { GetJobsUseCase } from '@/core/application/use-cases/jobs'
 import type { JobServerRepository } from '@/core/domain/repositories/job.server-repository'
 
 const API_URL = process.env.API_URL ?? 'http://localhost:5050'
