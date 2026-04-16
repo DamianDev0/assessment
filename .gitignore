@@ -32,6 +32,9 @@ next-env.d.ts
 # Docker volumes / local data
 postgres_data/
 
+# Lighthouse CI reports
+.lighthouseci/
+
 # Internal / tooling
 .agents/
 DESIGN.md
