@@ -8,7 +8,7 @@ import { createJobSchema } from '@/core/application/schemas/create-job.schema'
 import { useAddressAutocomplete } from '@/components/hooks/use-address-autocomplete'
 import { extractFormValues } from '@/core/shared/utils/form'
 import { CREATE_JOB_TEXT_KEYS } from '../config/form-keys.config'
-import type { CreateJobFormData } from '@/core/application/dto/create-job.dto'
+import type { CreateJobRequest } from '@/core/domain/entities/job'
 import type { AddressSuggestion } from '@/core/domain/entities/address'
 
 interface State {
@@ -37,7 +37,7 @@ function reducer(state: State, action: Action): State {
   }
 }
 
-function validate(data: CreateJobFormData): Record<string, string> | null {
+function validate(data: CreateJobRequest): Record<string, string> | null {
   const result = createJobSchema.safeParse(data)
   if (result.success) return null
 
@@ -55,7 +55,7 @@ export function useCreateJob(onSuccess: () => void) {
   const [selectedAddress, setSelectedAddress] = useState<AddressSuggestion | null>(null)
 
   const mutation = useMutation({
-    mutationFn: (data: CreateJobFormData) => clientContainer.createJob.execute(data),
+    mutationFn: (data: CreateJobRequest) => clientContainer.createJob.execute(data),
     onSuccess: () => {
       dispatch({ type: 'CLOSE_MODAL' })
       setSelectedAddress(null)
@@ -75,7 +75,7 @@ export function useCreateJob(onSuccess: () => void) {
   const handleFormSubmit = useCallback((form: HTMLFormElement) => {
     const v = extractFormValues(form, CREATE_JOB_TEXT_KEYS)
 
-    const data: CreateJobFormData = {
+    const data: CreateJobRequest = {
       title: v.title,
       description: v.description,
       street: selectedAddress?.addressLine1 ?? '',

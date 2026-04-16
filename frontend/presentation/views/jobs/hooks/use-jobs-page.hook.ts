@@ -7,11 +7,16 @@ import { sileo } from 'sileo'
 import { useShallow } from 'zustand/react/shallow'
 import { useJobsStore, selectFilteredJobs, selectFilters } from '@/store/jobs.store'
 import { clientContainer } from '@/core/infrastructure/di/client-container'
+import { JobStatus } from '@/core/shared/enums/job-status.enum'
 import { useCreateJob } from '../features/create-job'
 import { useCompleteJob } from '../features/complete-job'
 import { useScheduleJob } from '../features/schedule-job'
 import { useFilterJobs } from '../features/filter-jobs'
 import type { Job } from '@/core/domain/entities/job'
+
+interface StatusMutationContext {
+  previousStatus: JobStatus | null
+}
 
 export function useJobsPage(initialJobs: readonly Job[]) {
   const router = useRouter()
@@ -27,22 +32,32 @@ export function useJobsPage(initialJobs: readonly Job[]) {
     router.refresh()
   }, [router])
 
-  const startMutation = useMutation({
-    mutationFn: (jobId: string) => {
-      updateJobStatusOptimistic(jobId, 'InProgress')
-      return clientContainer.startJob.execute(jobId)
+  const startMutation = useMutation<void, Error, string, StatusMutationContext>({
+    mutationFn: (jobId) => clientContainer.startJob.execute(jobId),
+    onMutate: (jobId) => {
+      const previousStatus = useJobsStore.getState().jobs.find((j) => j.id === jobId)?.status ?? null
+      updateJobStatusOptimistic(jobId, JobStatus.IN_PROGRESS)
+      return { previousStatus }
     },
     onSuccess: () => { sileo.success({ title: 'Job started' }); handleMutationSuccess() },
-    onError: (error: Error, jobId: string) => { rollbackJobStatus(jobId, 'Scheduled'); sileo.error({ title: 'Failed', description: error.message }) },
+    onError: (error, jobId, context) => {
+      if (context?.previousStatus) rollbackJobStatus(jobId, context.previousStatus)
+      sileo.error({ title: 'Failed', description: error.message })
+    },
   })
 
-  const cancelMutation = useMutation({
-    mutationFn: (jobId: string) => {
-      updateJobStatusOptimistic(jobId, 'Cancelled')
-      return clientContainer.cancelJob.execute(jobId, 'Cancelled by user')
+  const cancelMutation = useMutation<void, Error, string, StatusMutationContext>({
+    mutationFn: (jobId) => clientContainer.cancelJob.execute(jobId, 'Cancelled by user'),
+    onMutate: (jobId) => {
+      const previousStatus = useJobsStore.getState().jobs.find((j) => j.id === jobId)?.status ?? null
+      updateJobStatusOptimistic(jobId, JobStatus.CANCELLED)
+      return { previousStatus }
     },
     onSuccess: () => { sileo.success({ title: 'Job cancelled' }); handleMutationSuccess() },
-    onError: (error: Error, jobId: string) => { rollbackJobStatus(jobId, 'Draft'); sileo.error({ title: 'Failed', description: error.message }) },
+    onError: (error, jobId, context) => {
+      if (context?.previousStatus) rollbackJobStatus(jobId, context.previousStatus)
+      sileo.error({ title: 'Failed', description: error.message })
+    },
   })
 
   const createJob = useCreateJob(handleMutationSuccess)

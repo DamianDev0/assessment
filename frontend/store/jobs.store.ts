@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import type { Job, JobFilters } from '@/core/domain/entities/job'
+import type { JobStatus } from '@/core/shared/enums/job-status.enum'
 import type { PaginationState, SortConfig } from '@/core/shared/interfaces/pagination'
 
 interface JobsState {
@@ -14,8 +15,8 @@ interface JobsState {
 interface JobsActions {
   setJobs: (jobs: Job[]) => void
   appendJobs: (jobs: Job[]) => void
-  updateJobStatusOptimistic: (jobId: string, newStatus: string) => void
-  rollbackJobStatus: (jobId: string, previousStatus: string) => void
+  updateJobStatusOptimistic: (jobId: string, newStatus: JobStatus) => void
+  rollbackJobStatus: (jobId: string, previousStatus: JobStatus) => void
   setFilters: (filters: Partial<JobFilters>) => void
   resetFilters: () => void
   toggleJobSelection: (jobId: string) => void
@@ -103,9 +104,7 @@ export const useJobsStore = create<JobsState & JobsActions>()(
   }))
 )
 
-export const selectAllJobs = (state: JobsState) => state.jobs
-
-const matchesStatus = (job: Job, status: string | null): boolean =>
+const matchesStatus = (job: Job, status: JobStatus | null): boolean =>
   !status || job.status === status
 
 const matchesAssignee = (job: Job, assigneeId: string | null): boolean =>

@@ -7,7 +7,7 @@ import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
 import { DatePicker } from '@/components/molecules/date-picker'
 import { cn } from '@/lib/utils'
-import { JOB_STATUS_OPTIONS } from '@/core/shared/enums/job-status.enum'
+import { JOB_STATUS_OPTIONS, type JobStatus } from '@/core/shared/enums/job-status.enum'
 import type { JobFilters } from '@/core/domain/entities/job'
 
 interface FilterBarContextValue {
@@ -23,14 +23,14 @@ function useFilterBarContext(): FilterBarContextValue {
 }
 
 interface StatusProps {
-  readonly value: string | null
+  readonly value: JobStatus | null
 }
 
 function FilterBarStatus({ value }: Readonly<StatusProps>) {
   const { onFilterChange } = useFilterBarContext()
 
   return (
-    <Select value={value ?? 'all'} onValueChange={(v) => onFilterChange({ status: v === 'all' ? null : v })}>
+    <Select value={value ?? 'all'} onValueChange={(v) => onFilterChange({ status: v === 'all' ? null : (v as JobStatus) })}>
       <SelectTrigger className="w-full sm:w-40" data-testid="status-filter" aria-label="Filter by status">
         <SelectValue placeholder="All statuses" />
       </SelectTrigger>

@@ -10,13 +10,14 @@ export class JobServerRepositoryImpl implements JobServerRepository {
     private readonly organizationId: string,
   ) {}
 
-  async getAll(params?: SearchJobsRequest): Promise<CursorPage<Job>> {
+  async list(params?: SearchJobsRequest): Promise<CursorPage<Job>> {
     const query = new URLSearchParams()
     if (params?.cursor) query.set('cursor', params.cursor)
     if (params?.limit) query.set('limit', String(params.limit))
     if (params?.searchTerm) query.set('searchTerm', params.searchTerm)
 
-    const url = `${this.apiUrl}/api/jobs${query.size ? `?${query}` : ''}`
+    const queryString = query.size ? `?${query.toString()}` : ''
+    const url = `${this.apiUrl}/api/jobs${queryString}`
 
     const res = await fetch(url, {
       headers: { 'X-Organization-Id': this.organizationId },

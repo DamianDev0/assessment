@@ -1,8 +1,10 @@
+import type { JobStatus } from '@/core/shared/enums/job-status.enum'
+
 export interface Job {
   id: string
   title: string
   description: string
-  status: string
+  status: JobStatus
   street: string
   city: string
   state: string
@@ -19,7 +21,7 @@ export interface Job {
 }
 
 export interface JobFilters {
-  status: string | null
+  status: JobStatus | null
   dateFrom: Date | null
   dateTo: Date | null
   assigneeId: string | null

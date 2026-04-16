@@ -5,16 +5,30 @@ import { useMutation } from '@tanstack/react-query'
 import { sileo } from 'sileo'
 import { clientContainer } from '@/core/infrastructure/di/client-container'
 import { useJobsStore } from '@/store/jobs.store'
+import { JobStatus } from '@/core/shared/enums/job-status.enum'
+
+interface Variables {
+  jobId: string
+  date: Date
+  assigneeId: string
+}
+
+interface Context {
+  previousStatus: JobStatus | null
+}
 
 export function useScheduleJob(onSuccess: () => void) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
   const { updateJobStatusOptimistic, rollbackJobStatus } = useJobsStore()
 
-  const mutation = useMutation({
-    mutationFn: ({ jobId, date, assigneeId }: { jobId: string; date: Date; assigneeId: string }) => {
-      updateJobStatusOptimistic(jobId, 'Scheduled')
-      return clientContainer.scheduleJob.execute(jobId, date.toISOString(), assigneeId)
+  const mutation = useMutation<void, Error, Variables, Context>({
+    mutationFn: ({ jobId, date, assigneeId }) =>
+      clientContainer.scheduleJob.execute(jobId, date.toISOString(), assigneeId),
+    onMutate: ({ jobId }) => {
+      const previousStatus = useJobsStore.getState().jobs.find((j) => j.id === jobId)?.status ?? null
+      updateJobStatusOptimistic(jobId, JobStatus.SCHEDULED)
+      return { previousStatus }
     },
     onSuccess: () => {
       setIsModalOpen(false)
@@ -22,8 +36,8 @@ export function useScheduleJob(onSuccess: () => void) {
       sileo.success({ title: 'Job scheduled' })
       onSuccess()
     },
-    onError: (error: Error) => {
-      if (selectedJobId) rollbackJobStatus(selectedJobId, 'Draft')
+    onError: (error, variables, context) => {
+      if (context?.previousStatus) rollbackJobStatus(variables.jobId, context.previousStatus)
       sileo.error({ title: 'Failed to schedule', description: error.message })
     },
   })

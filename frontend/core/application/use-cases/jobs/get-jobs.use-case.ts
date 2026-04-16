@@ -7,6 +7,6 @@ export class GetJobsUseCase {
   constructor(private readonly repository: JobServerRepository) {}
 
   execute(params?: SearchJobsRequest): Promise<CursorPage<Job>> {
-    return this.repository.getAll(params)
+    return this.repository.list(params)
   }
 }

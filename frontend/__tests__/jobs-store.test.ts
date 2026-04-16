@@ -1,12 +1,13 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { useJobsStore, selectFilteredJobs } from '@/store/jobs.store'
+import { JobStatus } from '@/core/shared/enums/job-status.enum'
 import type { Job } from '@/core/domain/entities/job'
 
 const mockJob = (overrides: Partial<Job> = {}): Job => ({
   id: crypto.randomUUID(),
   title: 'Fix Roof',
   description: '',
-  status: 'draft',
+  status: JobStatus.DRAFT,
   street: '123 Main St',
   city: 'Miami',
   state: 'FL',
@@ -41,37 +42,37 @@ describe('useJobsStore', () => {
   })
 
   it('updateJobStatusOptimistic updates the status', () => {
-    const job = mockJob({ status: 'in_progress' })
+    const job = mockJob({ status: JobStatus.IN_PROGRESS })
     useJobsStore.getState().setJobs([job])
 
-    useJobsStore.getState().updateJobStatusOptimistic(job.id, 'completed')
+    useJobsStore.getState().updateJobStatusOptimistic(job.id, JobStatus.COMPLETED)
 
-    expect(useJobsStore.getState().jobs[0].status).toBe('completed')
+    expect(useJobsStore.getState().jobs[0].status).toBe(JobStatus.COMPLETED)
   })
 
   it('rollbackJobStatus reverts status after failed API call', () => {
-    const job = mockJob({ status: 'in_progress' })
+    const job = mockJob({ status: JobStatus.IN_PROGRESS })
     useJobsStore.getState().setJobs([job])
 
-    useJobsStore.getState().updateJobStatusOptimistic(job.id, 'completed')
-    useJobsStore.getState().rollbackJobStatus(job.id, 'in_progress')
+    useJobsStore.getState().updateJobStatusOptimistic(job.id, JobStatus.COMPLETED)
+    useJobsStore.getState().rollbackJobStatus(job.id, JobStatus.IN_PROGRESS)
 
-    expect(useJobsStore.getState().jobs[0].status).toBe('in_progress')
+    expect(useJobsStore.getState().jobs[0].status).toBe(JobStatus.IN_PROGRESS)
   })
 
   it('selectFilteredJobs filters by status', () => {
     const jobs = [
-      mockJob({ status: 'draft' }),
-      mockJob({ status: 'completed' }),
-      mockJob({ status: 'draft' }),
+      mockJob({ status: JobStatus.DRAFT }),
+      mockJob({ status: JobStatus.COMPLETED }),
+      mockJob({ status: JobStatus.DRAFT }),
     ]
     useJobsStore.getState().setJobs(jobs)
-    useJobsStore.getState().setFilters({ status: 'draft' })
+    useJobsStore.getState().setFilters({ status: JobStatus.DRAFT })
 
     const state = useJobsStore.getState()
     const filtered = selectFilteredJobs(state)
     expect(filtered).toHaveLength(2)
-    expect(filtered.every((j) => j.status === 'draft')).toBe(true)
+    expect(filtered.every((j) => j.status === JobStatus.DRAFT)).toBe(true)
   })
 
   it('selectFilteredJobs filters by search term', () => {
@@ -89,7 +90,7 @@ describe('useJobsStore', () => {
   })
 
   it('resetFilters clears all filters', () => {
-    useJobsStore.getState().setFilters({ status: 'completed', searchTerm: 'test' })
+    useJobsStore.getState().setFilters({ status: JobStatus.COMPLETED, searchTerm: 'test' })
     useJobsStore.getState().resetFilters()
 
     const { filters } = useJobsStore.getState()
