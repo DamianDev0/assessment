@@ -17,6 +17,10 @@ import type { DataTableAction, DataTableProps } from "@/components/types/data-ta
 
 const EMPTY_ACTIONS: DataTableAction[] = []
 
+function ExpandedRowContent<T>({ item, render }: Readonly<{ item: T; render: (item: T) => React.ReactNode }>) {
+  return <>{render(item)}</>
+}
+
 function renderCellValue(value: unknown): string {
   if (value == null) return ""
   if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") return String(value)
@@ -135,7 +139,7 @@ export function DataTable<T extends { id?: string | number }>({
 
                       {expandable && renderExpandedRow ? (
                         <ExpandedRow isExpanded={isExpanded(rowId)} colSpan={totalColumns}>
-                          {renderExpandedRow(item)}
+                          <ExpandedRowContent item={item} render={renderExpandedRow} />
                         </ExpandedRow>
                       ) : null}
                     </Fragment>
