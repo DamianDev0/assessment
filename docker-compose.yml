@@ -38,13 +38,15 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: http://localhost:5050
+        NEXT_PUBLIC_ORG_ID: "00000000-0000-0000-0000-000000000001"
+        NEXT_PUBLIC_DEFAULT_CUSTOMER_ID: "00000000-0000-0000-0000-000000000002"
+        NEXT_PUBLIC_GEOAPIFY_KEY: "d7d9bebdc8b54e3a87fe3050d696f2f8"
     restart: unless-stopped
     environment:
       API_URL: http://backend:8080
-      NEXT_PUBLIC_API_URL: http://localhost:5050
       DEFAULT_ORG_ID: "00000000-0000-0000-0000-000000000001"
-      NEXT_PUBLIC_ORG_ID: "00000000-0000-0000-0000-000000000001"
-      NEXT_PUBLIC_DEFAULT_CUSTOMER_ID: "00000000-0000-0000-0000-000000000002"
       OTEL_SERVICE_NAME: "jobtracker-frontend"
     ports:
       - "3000:3000"
