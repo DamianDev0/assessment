@@ -7,6 +7,12 @@ import { Input } from "@/components/shadcn/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover"
 import { cn } from "@/lib/utils"
 
+function SortIcon({ direction }: Readonly<{ direction?: "asc" | "desc" | null }>) {
+  if (direction === "asc") return <ArrowUp className="h-3 w-3" />
+  if (direction === "desc") return <ArrowDown className="h-3 w-3" />
+  return <ArrowUpDown className="h-3 w-3 opacity-50" />
+}
+
 interface ColumnHeaderProps {
   title: string
   sortable?: boolean
@@ -29,7 +35,7 @@ export function ColumnHeader({
   onClearFilter,
 }: Readonly<ColumnHeaderProps>) {
   const [isOpen, setIsOpen] = useState(false)
-  const [localFilter, setLocalFilter] = useState(filterValue)
+  const [localFilter, setLocalFilter] = useState("")
 
   if (!sortable && !filterable) {
     return <span>{title}</span>
@@ -46,11 +52,6 @@ export function ColumnHeader({
     setIsOpen(false)
   }
 
-  const sortIcon =
-    sortDirection === "asc" ? <ArrowUp className="h-3 w-3" /> :
-    sortDirection === "desc" ? <ArrowDown className="h-3 w-3" /> :
-    <ArrowUpDown className="h-3 w-3 opacity-50" />
-
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
@@ -63,7 +64,7 @@ export function ColumnHeader({
           )}
         >
           {title}
-          {sortable ? sortIcon : null}
+          {sortable ? <SortIcon direction={sortDirection} /> : null}
           {filterValue ? <div className="ml-1 h-1.5 w-1.5 rounded-full bg-primary" /> : null}
         </Button>
       </PopoverTrigger>

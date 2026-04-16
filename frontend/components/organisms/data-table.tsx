@@ -10,10 +10,12 @@ import { ColumnHeader } from "@/components/atoms/column-header"
 import { RowActions } from "@/components/atoms/row-actions"
 import { TablePagination } from "@/components/molecules/table-pagination"
 import { ExpandedRow } from "@/components/molecules/expanded-row"
-import { useTableSort } from "./use-table-sort"
-import { useTableFilter } from "./use-table-filter"
-import { useExpandableRows } from "./use-expandable-rows"
-import type { DataTableProps } from "@/components/types/data-table.types"
+import { useTableSort } from "@/hooks/use-table-sort"
+import { useTableFilter } from "@/hooks/use-table-filter"
+import { useExpandableRows } from "@/hooks/use-expandable-rows"
+import type { DataTableAction, DataTableProps } from "@/components/types/data-table.types"
+
+const EMPTY_ACTIONS: DataTableAction[] = []
 
 function renderCellValue(value: unknown): string {
   if (value == null) return ""
@@ -26,7 +28,7 @@ export function DataTable<T extends { id?: string | number }>({
   columns,
   onRowAction,
   onRowClick,
-  actions = [],
+  actions = EMPTY_ACTIONS,
   pagination,
   emptyMessage = "No data available",
   isLoading = false,

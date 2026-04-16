@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { transitionJob, getJobSummary } from '@/core/domain/entities/job/job-state'
-import type { DraftJob, ScheduledJob, InProgressJob, CompletedJob, CancelledJob } from '@/core/domain/entities/job'
+import type { DraftJob, ScheduledJob, InProgressJob, CompletedJob } from '@/core/domain/entities/job'
 
 describe('transitionJob', () => {
   const draft: DraftJob = { status: 'draft', notes: 'New job' }

@@ -70,9 +70,9 @@ export function TablePagination({ pagination }: Readonly<TablePaginationProps>) 
           <ChevronLeft className="h-4 w-4" />
         </Button>
 
-        {getVisiblePages(pagination.currentPage, pagination.totalPages).map((page, index) =>
+        {getVisiblePages(pagination.currentPage, pagination.totalPages).map((page, pos) =>
           page === "ellipsis" ? (
-            <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">...</span>
+            <span key={`ellipsis-${pos < 3 ? 'start' : 'end'}`} className="px-2 text-muted-foreground">...</span>
           ) : (
             <Button
               key={page}

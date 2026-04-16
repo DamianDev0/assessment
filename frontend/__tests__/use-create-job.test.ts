@@ -10,7 +10,7 @@ vi.mock('sileo', () => ({
   sileo: { success: vi.fn(), error: vi.fn() },
 }))
 
-vi.mock('@/components/hooks/use-address-autocomplete', () => ({
+vi.mock('@/hooks/use-address-autocomplete', () => ({
   useAddressAutocomplete: () => ({
     query: '',
     suggestions: [],
