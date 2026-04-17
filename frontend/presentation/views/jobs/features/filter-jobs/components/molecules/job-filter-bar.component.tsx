@@ -79,19 +79,10 @@ interface SearchProps {
 
 const SEARCH_DEBOUNCE_MS = 400
 
-function FilterBarSearch({ value }: Readonly<SearchProps>) {
+function FilterBarSearchInput() {
   const { onFilterChange } = useFilterBarContext()
-  const [localValue, setLocalValue] = useState(value ?? '')
+  const [localValue, setLocalValue] = useState('')
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
-  const prevValueRef = useRef(value)
-
-  if (value !== prevValueRef.current) {
-    prevValueRef.current = value
-    const incoming = value ?? ''
-    if (incoming !== localValue) {
-      setLocalValue(incoming)
-    }
-  }
 
   const handleChange = (text: string) => {
     setLocalValue(text)
@@ -113,6 +104,10 @@ function FilterBarSearch({ value }: Readonly<SearchProps>) {
       />
     </div>
   )
+}
+
+function FilterBarSearch({ value }: Readonly<SearchProps>) {
+  return <FilterBarSearchInput key={value === null ? 'reset' : 'active'} />
 }
 
 interface FilterBarProps {
