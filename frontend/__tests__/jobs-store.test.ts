@@ -30,7 +30,7 @@ describe('useJobsStore', () => {
       jobs: [],
       filters: { status: null, dateFrom: null, dateTo: null, assigneeId: null, searchTerm: null },
       selectedJobIds: new Set(),
-      pagination: { cursor: null, pageSize: 20, hasMore: true },
+      pagination: { currentPage: 1, pageSize: 10, totalItems: 0, totalPages: 0 },
       sortConfig: { field: 'createdAt', direction: 'desc' },
     })
   })
