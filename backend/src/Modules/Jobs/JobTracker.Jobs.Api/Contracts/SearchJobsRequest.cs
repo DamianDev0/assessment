@@ -9,8 +9,10 @@ public sealed record SearchJobsRequest(
     DateTime? DateTo,
     Guid? AssigneeId,
     string? SearchTerm,
-    Guid? Cursor,
-    int Limit = 20)
+    int Page = 1,
+    int PageSize = 20,
+    string? SortField = null,
+    string? SortDirection = null)
 {
     public SearchJobsQuery ToQuery(Guid organizationId)
     {
@@ -31,6 +33,6 @@ public sealed record SearchJobsRequest(
 
         return new SearchJobsQuery(
             organizationId, parsedStatuses, DateFrom, DateTo,
-            AssigneeId, SearchTerm, Cursor, Limit);
+            AssigneeId, SearchTerm, Page, PageSize, SortField, SortDirection);
     }
 }

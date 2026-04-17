@@ -15,34 +15,23 @@ namespace JobTracker.Jobs.Application.Jobs.Queries.SearchJobs;
 /// </summary>
 internal sealed class SearchJobsQueryHandler(
     IDbConnectionFactory connectionFactory
-) : IRequestHandler<SearchJobsQuery, Result<CursorPage<JobResponse>>>
+) : IRequestHandler<SearchJobsQuery, Result<PagedResult<JobResponse>>>
 {
-    public async Task<Result<CursorPage<JobResponse>>> Handle(
+    public async Task<Result<PagedResult<JobResponse>>> Handle(
         SearchJobsQuery query,
         CancellationToken cancellationToken)
     {
         using var connection = connectionFactory.CreateConnection();
 
-        // Build dynamic SQL based on provided filters
-        var sql = BuildSql(query);
         var parameters = BuildParameters(query);
+        var totalCount = await connection.ExecuteScalarAsync<int>(BuildCountSql(query), parameters);
+        var items = (await connection.QueryAsync<JobResponse>(BuildSql(query), parameters)).AsList();
 
-        var items = (await connection.QueryAsync<JobResponse>(sql, parameters))
-            .AsList();
-
-        // Cursor pagination: we fetch limit + 1 to detect if there's a next page
-        Guid? nextCursor = null;
-        if (items.Count > query.Limit)
-        {
-            items.RemoveAt(items.Count - 1);
-            nextCursor = items[^1].Id;
-        }
-
-        var page = new CursorPage<JobResponse>(items, nextCursor);
+        var page = new PagedResult<JobResponse>(items, totalCount, query.Page, query.PageSize);
         return Result.Success(page);
     }
 
-    private static string BuildSql(SearchJobsQuery query)
+    private static string BuildWhere(SearchJobsQuery query)
     {
         var where = "WHERE j.organization_id = @OrganizationId";
 
@@ -59,20 +48,17 @@ internal sealed class SearchJobsQueryHandler(
             where += " AND j.assignee_id = @AssigneeId";
 
         if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-            where += @" AND to_tsvector('english', j.title || ' ' || j.description)
-                        @@ plainto_tsquery('english', @SearchTerm)";
+            where += " AND (j.title ILIKE @SearchPattern OR j.description ILIKE @SearchPattern)";
 
-        if (query.Cursor.HasValue)
-            where += @" AND (j.created_at < (SELECT created_at FROM jobs.jobs WHERE id = @Cursor)
-                        OR (j.created_at = (SELECT created_at FROM jobs.jobs WHERE id = @Cursor)
-                            AND j.id < @Cursor))";
+        return where;
+    }
 
-        var rankSelect = !string.IsNullOrWhiteSpace(query.SearchTerm)
-            ? @", ts_rank(
-                    to_tsvector('english', j.title || ' ' || j.description),
-                    plainto_tsquery('english', @SearchTerm)
-                ) AS rank"
-            : "";
+    private static string BuildCountSql(SearchJobsQuery query) =>
+        $"SELECT COUNT(*) FROM jobs.jobs j {BuildWhere(query)}";
+
+    private static string BuildSql(SearchJobsQuery query)
+    {
+        var where = BuildWhere(query);
 
         return $"""
             SELECT
@@ -93,13 +79,12 @@ internal sealed class SearchJobsQueryHandler(
                 COUNT(p.id)      AS {nameof(JobResponse.PhotoCount)},
                 j.created_at     AS {nameof(JobResponse.CreatedAt)},
                 j.updated_at     AS {nameof(JobResponse.UpdatedAt)}
-                {rankSelect}
             FROM jobs.jobs j
             LEFT JOIN jobs.job_photos p ON p.job_id = j.id
             {where}
             GROUP BY j.id
-            ORDER BY j.created_at DESC, j.id DESC
-            LIMIT @Limit
+            ORDER BY {ResolveSortColumn(query.SortField)} {ResolveSortDir(query.SortDirection)}, j.id DESC
+            LIMIT @PageSize OFFSET @Offset
             """;
     }
 
@@ -107,7 +92,8 @@ internal sealed class SearchJobsQueryHandler(
     {
         var p = new DynamicParameters();
         p.Add("OrganizationId", query.OrganizationId);
-        p.Add("Limit", query.Limit + 1); // +1 for next-page detection
+        p.Add("PageSize", query.PageSize);
+        p.Add("Offset", (query.Page - 1) * query.PageSize);
 
         if (query.Statuses is { Length: > 0 })
             p.Add("Statuses", query.Statuses.Select(s => s.ToString()).ToArray());
@@ -122,11 +108,19 @@ internal sealed class SearchJobsQueryHandler(
             p.Add("AssigneeId", query.AssigneeId.Value);
 
         if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-            p.Add("SearchTerm", query.SearchTerm);
-
-        if (query.Cursor.HasValue)
-            p.Add("Cursor", query.Cursor.Value);
+            p.Add("SearchPattern", $"%{query.SearchTerm}%");
 
         return p;
     }
+
+    private static readonly HashSet<string> AllowedSortColumns = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "title", "status", "city", "scheduled_date", "created_at", "updated_at"
+    };
+
+    private static string ResolveSortColumn(string? field) =>
+        field is not null && AllowedSortColumns.Contains(field) ? $"j.{field}" : "j.created_at";
+
+    private static string ResolveSortDir(string? dir) =>
+        string.Equals(dir, "asc", StringComparison.OrdinalIgnoreCase) ? "ASC" : "DESC";
 }

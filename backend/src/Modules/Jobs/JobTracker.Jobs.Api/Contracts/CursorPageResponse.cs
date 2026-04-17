@@ -1,6 +1,8 @@
 namespace JobTracker.Jobs.Api.Contracts;
 
-public sealed record CursorPageResponse<T>(
+public sealed record PagedResponse<T>(
     IReadOnlyList<T> Items,
-    Guid? NextCursor,
-    bool HasMore);
+    int TotalCount,
+    int TotalPages,
+    int CurrentPage,
+    int PageSize);

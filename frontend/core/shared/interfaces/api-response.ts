@@ -1,7 +1,9 @@
-export interface CursorPage<T> {
+export interface PagedResult<T> {
   items: T[]
-  nextCursor: string | null
-  hasMore: boolean
+  totalCount: number
+  totalPages: number
+  currentPage: number
+  pageSize: number
 }
 
 export class ApiError extends Error {

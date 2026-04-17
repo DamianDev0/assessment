@@ -1,7 +1,7 @@
 'use client'
 
-import { createContext, useContext, useMemo } from 'react'
-import { X } from 'lucide-react'
+import { createContext, useContext, useMemo, useState, useRef } from 'react'
+import { X, Search } from 'lucide-react'
 import { Input } from '@/components/shadcn/input'
 import { Button } from '@/components/shadcn/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/shadcn/select'
@@ -77,19 +77,41 @@ interface SearchProps {
   readonly value: string | null
 }
 
+const SEARCH_DEBOUNCE_MS = 400
+
 function FilterBarSearch({ value }: Readonly<SearchProps>) {
   const { onFilterChange } = useFilterBarContext()
+  const [localValue, setLocalValue] = useState(value ?? '')
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
+  const prevValueRef = useRef(value)
+
+  if (value !== prevValueRef.current) {
+    prevValueRef.current = value
+    const incoming = value ?? ''
+    if (incoming !== localValue) {
+      setLocalValue(incoming)
+    }
+  }
+
+  const handleChange = (text: string) => {
+    setLocalValue(text)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => onFilterChange({ searchTerm: text || null }), SEARCH_DEBOUNCE_MS)
+  }
 
   return (
-    <Input
-      type="search"
-      value={value ?? ''}
-      onChange={(e) => onFilterChange({ searchTerm: e.target.value || null })}
-      placeholder="Search jobs..."
-      className="w-full sm:w-50"
-      data-testid="search-filter"
-      aria-label="Search jobs"
-    />
+    <div className="relative w-full sm:w-64">
+      <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" aria-hidden="true" />
+      <Input
+        type="search"
+        value={localValue}
+        onChange={(e) => handleChange(e.target.value)}
+        placeholder="Search jobs..."
+        className="pl-9"
+        data-testid="search-filter"
+        aria-label="Search jobs"
+      />
+    </div>
   )
 }
 

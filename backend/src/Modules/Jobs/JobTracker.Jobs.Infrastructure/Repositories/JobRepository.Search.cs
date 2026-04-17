@@ -6,7 +6,7 @@ namespace JobTracker.Jobs.Infrastructure.Repositories;
 
 internal sealed partial class JobRepository
 {
-    public async Task<CursorPage<Job>> SearchAsync(
+    public async Task<PagedResult<Job>> SearchAsync(
         JobSearchCriteria criteria,
         CancellationToken cancellationToken = default)
     {
@@ -34,35 +34,15 @@ internal sealed partial class JobRepository
                     .Matches(EF.Functions.PlainToTsQuery("english", criteria.SearchTerm)));
         }
 
-        if (criteria.Cursor.HasValue)
-        {
-            var cursorData = await context.Jobs
-                .AsNoTracking()
-                .Where(j => j.Id == criteria.Cursor.Value)
-                .Select(j => new { j.CreatedAt, j.Id })
-                .FirstOrDefaultAsync(cancellationToken);
-
-            if (cursorData is not null)
-            {
-                query = query.Where(j =>
-                    j.CreatedAt < cursorData.CreatedAt ||
-                    (j.CreatedAt == cursorData.CreatedAt && j.Id.CompareTo(cursorData.Id) < 0));
-            }
-        }
+        var totalCount = await query.CountAsync(cancellationToken);
 
         var items = await query
             .OrderByDescending(j => j.CreatedAt)
             .ThenByDescending(j => j.Id)
-            .Take(criteria.Limit + 1)
+            .Skip((criteria.Page - 1) * criteria.PageSize)
+            .Take(criteria.PageSize)
             .ToListAsync(cancellationToken);
 
-        Guid? nextCursor = null;
-        if (items.Count > criteria.Limit)
-        {
-            items.RemoveAt(items.Count - 1);
-            nextCursor = items[^1].Id;
-        }
-
-        return new CursorPage<Job>(items, nextCursor);
+        return new PagedResult<Job>(items, totalCount, criteria.Page, criteria.PageSize);
     }
 }

@@ -16,32 +16,32 @@ interface JobStatusConfig {
 const JOB_STATUS_CONFIG: Record<JobStatus, JobStatusConfig> = {
   [JobStatus.DRAFT]: {
     label: 'Draft',
-    color: '#4b5563',
-    chipColor: 'rgba(107,114,128,0.18)',
+    color: '#6b7280',
+    chipColor: 'rgba(107,114,128,0.15)',
     terminal: false,
   },
   [JobStatus.SCHEDULED]: {
     label: 'Scheduled',
-    color: '#4338ca',
-    chipColor: 'rgba(99,102,241,0.18)',
+    color: '#6366f1',
+    chipColor: 'rgba(99,102,241,0.15)',
     terminal: false,
   },
   [JobStatus.IN_PROGRESS]: {
     label: 'In Progress',
-    color: '#047857',
-    chipColor: 'rgba(16,185,129,0.18)',
+    color: '#3b82f6',
+    chipColor: 'rgba(59,130,246,0.15)',
     terminal: false,
   },
   [JobStatus.COMPLETED]: {
     label: 'Completed',
-    color: '#065f46',
-    chipColor: 'rgba(16,185,129,0.22)',
+    color: '#22c55e',
+    chipColor: 'rgba(34,197,94,0.15)',
     terminal: true,
   },
   [JobStatus.CANCELLED]: {
     label: 'Cancelled',
-    color: '#b91c1c',
-    chipColor: 'rgba(239,68,68,0.18)',
+    color: '#ef4444',
+    chipColor: 'rgba(239,68,68,0.15)',
     terminal: true,
   },
 }

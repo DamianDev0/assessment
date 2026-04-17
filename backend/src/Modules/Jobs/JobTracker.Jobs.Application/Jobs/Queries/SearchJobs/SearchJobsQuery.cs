@@ -12,6 +12,8 @@ public sealed record SearchJobsQuery(
     DateTime? DateTo,
     Guid? AssigneeId,
     string? SearchTerm,
-    Guid? Cursor,
-    int Limit = 20
-) : IRequest<Result<CursorPage<JobResponse>>>;
+    int Page = 1,
+    int PageSize = 20,
+    string? SortField = null,
+    string? SortDirection = null
+) : IRequest<Result<PagedResult<JobResponse>>>;

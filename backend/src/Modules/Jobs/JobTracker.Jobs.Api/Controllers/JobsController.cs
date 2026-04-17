@@ -97,7 +97,7 @@ public sealed class JobsController(ISender sender) : ControllerBase
 
 
     [HttpGet]
-    [ProducesResponseType(typeof(CursorPageResponse<JobResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PagedResponse<JobResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Search(
         [FromQuery] SearchJobsRequest request,
@@ -108,8 +108,9 @@ public sealed class JobsController(ISender sender) : ControllerBase
         var result = await sender.Send(query, cancellationToken);
 
         return result.IsSuccess
-            ? Ok(new CursorPageResponse<JobResponse>(
-                result.Value.Items, result.Value.NextCursor, result.Value.HasMore))
+            ? Ok(new PagedResponse<JobResponse>(
+                result.Value.Items, result.Value.TotalCount,
+                result.Value.TotalPages, result.Value.CurrentPage, result.Value.PageSize))
             : ToErrorResult(result.Error);
     }
 

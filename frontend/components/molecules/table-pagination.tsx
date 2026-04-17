@@ -72,10 +72,10 @@ export function TablePagination({ pagination }: Readonly<TablePaginationProps>) 
 
         {getVisiblePages(pagination.currentPage, pagination.totalPages).map((page, pos) =>
           page === "ellipsis" ? (
-            <span key={`ellipsis-${pos < 3 ? 'start' : 'end'}`} className="px-2 text-muted-foreground">...</span>
+            <span key={`ellipsis-${pos}`} className="px-2 text-muted-foreground">...</span>
           ) : (
             <Button
-              key={page}
+              key={`page-${page}`}
               variant={pagination.currentPage === page ? "default" : "outline"}
               size="sm"
               onClick={() => pagination.onPageChange(page)}

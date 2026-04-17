@@ -14,14 +14,13 @@ interface JobsState {
 
 interface JobsActions {
   setJobs: (jobs: Job[]) => void
-  appendJobs: (jobs: Job[]) => void
   updateJobStatusOptimistic: (jobId: string, newStatus: JobStatus) => void
   rollbackJobStatus: (jobId: string, previousStatus: JobStatus) => void
   setFilters: (filters: Partial<JobFilters>) => void
   resetFilters: () => void
   toggleJobSelection: (jobId: string) => void
   clearSelection: () => void
-  setCursor: (cursor: string | null, hasMore: boolean) => void
+  setPagination: (pagination: Partial<PaginationState>) => void
   setSortConfig: (config: SortConfig<Job>) => void
 }
 
@@ -38,17 +37,12 @@ export const useJobsStore = create<JobsState & JobsActions>()(
     jobs: [],
     selectedJobIds: new Set(),
     filters: { ...DEFAULT_FILTERS },
-    pagination: { cursor: null, pageSize: 20, hasMore: true },
+    pagination: { currentPage: 1, pageSize: 10, totalItems: 0, totalPages: 0 },
     sortConfig: { field: 'createdAt', direction: 'desc' },
 
     setJobs: (jobs) =>
       set((state) => {
         state.jobs = jobs
-      }),
-
-    appendJobs: (jobs) =>
-      set((state) => {
-        state.jobs.push(...jobs)
       }),
 
     updateJobStatusOptimistic: (jobId, newStatus) =>
@@ -66,15 +60,13 @@ export const useJobsStore = create<JobsState & JobsActions>()(
     setFilters: (filters) =>
       set((state) => {
         Object.assign(state.filters, filters)
-        state.pagination.cursor = null
-        state.pagination.hasMore = true
+        state.pagination.currentPage = 1
       }),
 
     resetFilters: () =>
       set((state) => {
         state.filters = { ...DEFAULT_FILTERS }
-        state.pagination.cursor = null
-        state.pagination.hasMore = true
+        state.pagination.currentPage = 1
       }),
 
     toggleJobSelection: (jobId) =>
@@ -91,10 +83,9 @@ export const useJobsStore = create<JobsState & JobsActions>()(
         state.selectedJobIds.clear()
       }),
 
-    setCursor: (cursor, hasMore) =>
+    setPagination: (pagination) =>
       set((state) => {
-        state.pagination.cursor = cursor
-        state.pagination.hasMore = hasMore
+        Object.assign(state.pagination, pagination)
       }),
 
     setSortConfig: (config) =>

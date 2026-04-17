@@ -6,7 +6,7 @@ export interface DataTableColumn<T> {
   render?: (item: T) => ReactNode
   className?: string
   sortable?: boolean
-  filterable?: boolean
+  sortKey?: string
 }
 
 export interface DataTableAction {
@@ -32,9 +32,9 @@ export interface DataTableProps<T> {
   pagination?: DataTablePagination
   emptyMessage?: string
   isLoading?: boolean
-  searchable?: boolean
-  searchPlaceholder?: string
-  onSearch?: (value: string) => void
+  onSort?: (field: string) => void
+  sortField?: string | null
+  sortDirection?: "asc" | "desc"
   expandable?: boolean
   renderExpandedRow?: (item: T) => ReactNode
   rowClassName?: (item: T) => string | undefined

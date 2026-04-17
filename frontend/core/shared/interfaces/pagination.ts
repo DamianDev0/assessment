@@ -1,7 +1,8 @@
 export interface PaginationState {
-  cursor: string | null
+  currentPage: number
   pageSize: number
-  hasMore: boolean
+  totalItems: number
+  totalPages: number
 }
 
 export interface SortConfig<T> {

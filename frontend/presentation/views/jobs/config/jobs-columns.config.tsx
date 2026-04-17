@@ -32,12 +32,14 @@ export const getJobsColumns = (): DataTableColumn<Job>[] => [
     key: "title",
     header: "Title",
     sortable: true,
+    sortKey: "title",
+    className: "min-w-[160px]",
     render: (job) => <span className="font-[510] text-foreground">{job.title}</span>,
   },
   {
     key: "description",
     header: "Description",
-    className: "hidden lg:table-cell max-w-[200px]",
+    className: "hidden lg:table-cell min-w-[180px] max-w-[260px]",
     render: (job) => (
       <span className="text-muted-foreground truncate block" title={job.description}>
         {job.description || "—"}
@@ -47,30 +49,31 @@ export const getJobsColumns = (): DataTableColumn<Job>[] => [
   {
     key: "status",
     header: "Status",
-    filterable: true,
+    className: "min-w-[110px]",
     render: (job) => <StatusBadge status={job.status} />,
   },
   {
     key: "city",
     header: "Location",
-    className: "hidden md:table-cell",
+    className: "hidden md:table-cell min-w-[120px]",
     render: (job) => (
-      <span className="text-muted-foreground">{job.city}, {job.state}</span>
+      <span className="text-muted-foreground whitespace-nowrap">{job.city}, {job.state}</span>
     ),
   },
   {
     key: "scheduledDate",
     header: "Scheduled",
     sortable: true,
-    className: "hidden lg:table-cell",
+    sortKey: "scheduled_date",
+    className: "hidden lg:table-cell min-w-[110px]",
     render: (job) => (
-      <span className="text-muted-foreground">{formatDate(job.scheduledDate)}</span>
+      <span className="text-muted-foreground whitespace-nowrap">{formatDate(job.scheduledDate)}</span>
     ),
   },
   {
     key: "assigneeId",
     header: "Assignee",
-    className: "hidden xl:table-cell",
+    className: "hidden xl:table-cell min-w-[90px]",
     render: (job) => (
       <span className="text-muted-foreground text-xs font-mono">
         {job.assigneeId ? job.assigneeId.slice(0, 8) : "—"}
@@ -89,9 +92,10 @@ export const getJobsColumns = (): DataTableColumn<Job>[] => [
     key: "createdAt",
     header: "Created",
     sortable: true,
-    className: "hidden lg:table-cell",
+    sortKey: "created_at",
+    className: "hidden lg:table-cell min-w-[100px]",
     render: (job) => (
-      <span className="text-muted-foreground">{formatDate(job.createdAt)}</span>
+      <span className="text-muted-foreground whitespace-nowrap">{formatDate(job.createdAt)}</span>
     ),
   },
 ]

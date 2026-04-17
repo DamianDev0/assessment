@@ -4,6 +4,8 @@ export interface SearchJobsRequest {
   dateTo?: string
   assigneeId?: string
   searchTerm?: string
-  cursor?: string
-  limit?: number
+  page?: number
+  pageSize?: number
+  sortField?: string
+  sortDirection?: 'asc' | 'desc'
 }

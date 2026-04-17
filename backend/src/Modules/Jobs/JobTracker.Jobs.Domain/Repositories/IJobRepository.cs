@@ -8,7 +8,7 @@ public interface IJobRepository
     Task<Job?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Job?> GetByIdAndOrganizationAsync(Guid id, Guid organizationId, CancellationToken cancellationToken = default);
     Task AddAsync(Job job, CancellationToken cancellationToken = default);
-    Task<CursorPage<Job>> SearchAsync(JobSearchCriteria criteria, CancellationToken cancellationToken = default);
+    Task<PagedResult<Job>> SearchAsync(JobSearchCriteria criteria, CancellationToken cancellationToken = default);
 }
 
 public sealed record JobSearchCriteria(
@@ -18,22 +18,24 @@ public sealed record JobSearchCriteria(
     DateTime? DateTo = null,
     Guid? AssigneeId = null,
     string? SearchTerm = null,
-    Guid? Cursor = null,
-    int Limit = 20
+    int Page = 1,
+    int PageSize = 20
 );
 
-public sealed class CursorPage<T>
+public sealed class PagedResult<T>
 {
     public IReadOnlyList<T> Items { get; }
-    public Guid? NextCursor { get; }
-    public bool HasMore => NextCursor.HasValue;
+    public int TotalCount { get; }
+    public int TotalPages { get; }
+    public int CurrentPage { get; }
+    public int PageSize { get; }
 
-    public CursorPage(IReadOnlyList<T> items, Guid? nextCursor)
+    public PagedResult(IReadOnlyList<T> items, int totalCount, int currentPage, int pageSize)
     {
         Items = items;
-        NextCursor = nextCursor;
+        TotalCount = totalCount;
+        CurrentPage = currentPage;
+        PageSize = pageSize;
+        TotalPages = pageSize > 0 ? (int)Math.Ceiling(totalCount / (double)pageSize) : 0;
     }
-
-    public CursorPage<TOut> Map<TOut>(Func<T, TOut> selector) =>
-        new(Items.Select(selector).ToList(), NextCursor);
 }
